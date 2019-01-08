@@ -62,7 +62,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         eye_old                 = (ImageView) findViewById(R.id.eye_old);
 
         progress = new ProgressDialog(this);
-        progress.setMessage("Please wait..");
+        progress.setMessage("Please wait...");
         progress.setCancelable(false);
 
     }
