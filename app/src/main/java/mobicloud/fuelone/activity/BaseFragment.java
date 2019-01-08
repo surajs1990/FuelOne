@@ -26,7 +26,9 @@ public class BaseFragment extends Fragment {
                 .commitAllowingStateLoss();
     }
 
-
+/*
+*
+* */
     public void replaceFragment(int containerViewId, Fragment frag) {
         FragmentManager manager = getActivity().getSupportFragmentManager();
         if (manager != null) {
