@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@null"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_marginBottom="2sp"
+        android:paddingRight="5sp"
+        android:paddingLeft="5sp"
+        android:orientation="vertical"
+        android:id="@+id/attechmnetlayout"
+        android:background="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/cameraLayout"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="50sp">
+
+            <TextView
+                android:textColor="@color/orange"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:text="@string/camera"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/galleryLayout"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="50sp">
+
+            <TextView
+                android:textColor="@color/orange"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:text="@string/gallery"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/cancelTxt"
+             android:textColor="@color/orange"
+             android:textSize="20sp"
+             android:gravity="center"
+             android:layout_width="match_parent"
+             android:layout_height="50sp"
+             android:text="@string/cancel"
+             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

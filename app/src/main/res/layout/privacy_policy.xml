@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parentlayout"
+    android:orientation="vertical">
+
+    <!--    android:background="@drawable/dashbg"-->
+
+    <RelativeLayout
+        android:background="@color/orange"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout2">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10sp"
+            android:layout_width="50sp"
+            android:layout_height="match_parent"
+            android:id="@+id/backLayout">
+
+            <ImageView
+                android:src="@drawable/ic_left_arrow_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/privacy_policy"
+            android:textColor="@color/titleColor"
+            android:textSize="20sp"
+            app:fontFamily="@font/roboto" />
+
+    </RelativeLayout>
+
+    <com.github.barteksc.pdfviewer.PDFView
+        android:layout_below="@+id/linearLayout2"
+        android:id="@+id/pdfView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

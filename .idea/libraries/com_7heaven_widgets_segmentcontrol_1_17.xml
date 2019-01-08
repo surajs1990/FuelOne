@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.7heaven.widgets:segmentcontrol-1.17">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/segmentcontrol-1.17.aar/84993b6329548ea515e4710a464b029a/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/segmentcontrol-1.17.aar/84993b6329548ea515e4710a464b029a/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.7heaven.widgets/segmentcontrol/1.17/b4bd5fce24ead281fb2d32a68353734604bb962b/segmentcontrol-1.17-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

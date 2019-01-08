@@ -1,0 +1,200 @@
+<resources>
+    <string name="app_name">FUEL APP</string>
+
+    <!--Splash Strings-->
+    <string name="splash_txt">AI LOGISTICS</string>
+    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
+    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
+
+    <string name="_continue">CONTINUE</string>
+    <string name="_enter_RO">Please Enter RO ID</string>
+    <string name="_RO">RO ID</string>
+
+    <!--Profile -->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="full_name">Full Name</string>
+    <string name="finished">FINISHED</string>
+    <string name="contact_no">Contact No</string>
+    <string name="update">UPDATE</string>
+
+    <!--Setting -->
+    <string name="tank_config">Tank Config</string>
+    <string name="change_password">Change Password</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="coming_soon">Coming Soon!</string>
+    <string name="log_off">Log Off</string>
+
+    <!--Tank Config-->
+    <string name="configured_tank">Please configured your fuel\ntank and nozzles.</string>
+    <string name="number_of_tank">Number Of Tank</string>
+    <string name="number_of_nozzel">Number Of Nozzel</string>
+
+
+    <!--Change Password -->
+    <string name="home_txt">Home</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <!--Slide Menu -->
+    <string name="home">Home</string>
+    <string name="dip_entry">Dip Entry</string>
+    <string name="nozzel">Nozzel Entry</string>
+    <string name="report">Reports</string>
+    <string name="profile">Profile</string>
+    <string name="setting_">Setting</string>
+    <string name="about_us">About Us</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="signOut">SignOut</string>
+
+    <string name="_contact">CONTACT US</string>
+    <string name="_dip">Dip</string>
+    <string name="_nozzel">Nozzel</string>
+    <string name="_report">Report</string>
+    <string name="_contact_us">Contact Us</string>
+    <string name="_about_us">About Us</string>
+    <string name="_profile">Profile</string>
+    <string name="_setting">Transaction</string>
+    <string name="setting">TRANSACTION</string>
+
+    <string name="take_picture">Take Picture</string>
+    <string name="view_attachment">View Attachment</string>
+    <string name="call_customer">Call Customer</string>
+    <string name="gift_voucher">Gift Vochure</string>
+
+
+    <!--Shipment-->
+    <string name="shipment_ship">Shipment#: </string>
+    <string name="order_ship">Order#: </string>
+    <string name="pick_">Pick#: </string>
+    <string name="retailer_">Retailer: </string>
+    <string name="pickData">Pick Date: </string>
+    <string name="ship_location_ship">Shipment Location: </string>
+
+    <!--Profile-->
+    <string name="cancel">Cancel</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+
+    <!--Item Detail-->
+    <string name="comment">Comment</string>
+    <string name="received">RECEIVED</string>
+    <string name="_submit">SUBMIT</string>
+    <string name="_chart">DIP CHART</string>
+    <string name="_next">NEXT</string>
+    <string name="damaged">DAMAGED</string>
+    <string name="_damaged">Damaged</string>
+
+    <string name="emp_id">Email or Employee Id</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">SIGN IN</string>
+
+    <string name="forgot_password">Forgot Password ?</string>
+
+    <string name="out_bound">OUT BOUND</string>
+
+
+    <string name="reset_password_msg">To reset your Password please \n enter your email address</string>
+
+    <string name="receiving">RECEIVING</string>
+    <string name="shipping">SHIPPING</string>
+    <string name="picking">PICKING</string>
+
+    <string name="internet_connection">Check your internet connection</string>
+
+    <string name="receiving_shipment">Receiving Shipment Details</string>
+    <string name="receive_filter">Receive Filter</string>
+    <string name="select_location">Select Location</string>
+    <string name="select_carriers">Select Carriers</string>
+    <string name="search_order">Search Order Number</string>
+    <string name="search_product">Search Products</string>
+    <string name="search_sku">Search Sku</string>
+    <string name="select_retailer">Select Retailer</string>
+    <string name="received_date">Received Date</string>
+    <string name="select_status">Select Receiving Status</string>
+    <string name="expected_receive_date">Expected Receive Date</string>
+    <string name="submit">Submit</string>
+    <string name="finish_picking">FINISH PICKING</string>
+
+
+    <string name="product_details">Product Details</string>
+    <string name="receive_orders">Receive Orders</string>
+    <string name="shipment">Shipment</string>
+    <string name="shipment_status">Shipment Status</string>
+    <string name="select_shipment_status">Select Status</string>
+    <string name="orders_details">Orders Details</string>
+    <string name="shipment_details">Shipment Details</string>
+    <string name="picking_details">Picking Details</string>
+    <string name="receive_order_lines">Receive Order Lines</string>
+
+    <string name="ship_from">SHIP FROM</string>
+    <string name="ship_to">SHIP TO</string>
+    <string name="pic_order">Pick Order</string>
+    <string name="message_shipment_">No Shipment product found!</string>
+    <string name="message_pic_order">No Picking order found!</string>
+    <string name="status_ship">Status : To be </string>
+    <string name="call_or_attach">Please call or attach media for any \n damage in product</string>
+
+
+    <!--validation-->
+    <string name="enter_name">Please enter first name</string>
+    <string name="enter_last_name">Please enter last name</string>
+    <string name="eater_email">Please enter email</string>
+    <string name="valid_email">Please enter valid email</string>
+    <string name="enter_mobile">Please Enter mobile number</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_old_password">Enter old password</string>
+    <string name="password_same">Both password should be same</string>
+
+    <!---->
+    <string name="invocie">Invoice#:</string>
+    <string name="product">Product:</string>
+    <string name="type">Type:</string>
+    <string name="brand">Brand:</string>
+    <string name="sku">SKU:</string>
+    <string name="sku_hash">SKU#</string>
+
+    <string name="receivedby">Recevied By:</string>
+    <string name="received_on">Recevied On:</string>
+
+    <string name="storage_location">Storage Location in </string>
+
+
+
+    <string name="ship_id">Ship ID : </string>
+    <string name="wave">Wave #:</string>
+    <string name="route">Route #:</string>
+    <string name="ship_status">Ship Status: </string>
+
+    <string name="expected_date">Exp Recevied Date: </string>
+    <string name="total_count">Total Count: </string>
+
+    <string name="unit_quantity">Unit Quantity: </string>
+
+    <string name="standard">Standard (Plastic)</string>
+    <string name="electronic">Electronic (E-Gift card)</string>
+
+    <string name="crop_action_error">Sorry! image is not cropped.</string>
+    <string name="gallery_pick_error">Sorry! image is not picked from gallery. Please try again.</string>
+    <string name="camera_capture_error">Sorry! image is not captured. Please try again.</string>
+    <string name="crop_action_support">Sorry! your device doesn\'t support cropping action.</string>
+
+    <string-array name="month">
+        <item>Jan</item>
+        <item>Fab</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
+
+</resources>

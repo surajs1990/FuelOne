@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layout_background_"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+
+        android:paddingTop="50sp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:background="@color/colorWhite"
+            android:id="@+id/changePasswordTxt"
+            android:paddingRight="10sp"
+            android:text="@string/change_password"
+            android:textColor="@color/subHeadingColor"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="50sp" />
+
+        <View
+            android:layout_marginLeft="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@color/gray"/>
+
+        <TextView
+            android:background="@color/colorWhite"
+            android:id="@+id/privatePolicyTxt"
+            android:paddingRight="10sp"
+            android:text="@string/privacy_policy"
+            android:textColor="@color/subHeadingColor"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="50sp" />
+
+        <TextView
+            android:id="@+id/tankLayout"
+            android:layout_marginTop="50sp"
+            android:background="@color/colorWhite"
+            android:paddingRight="10sp"
+            android:text="@string/tank_config"
+            android:textColor="@color/subHeadingColor"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:paddingLeft="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="50sp" />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="com.github.imjeevandeshmukh:GlideToast-1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/GlideToast-1.0.aar/cea1dd0a6c086e80444d0e3502044dac/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/GlideToast-1.0.aar/cea1dd0a6c086e80444d0e3502044dac/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
