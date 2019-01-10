@@ -30,7 +30,8 @@ public class MappingAdapter extends RecyclerView.Adapter<MappingAdapter.MyViewHo
     private ArrayList<MapingModel> list ;
     HomeViewActivity homeViewActivity;
     LinearLayout layout;
-    TextView tank,fule, noz;
+    TextView  noz;
+    /*tank,fule,*/
     LinearLayout.LayoutParams param;
 
     public MappingAdapter(Context context, ArrayList<MapingModel> list) {
@@ -69,31 +70,31 @@ public class MappingAdapter extends RecyclerView.Adapter<MappingAdapter.MyViewHo
                 layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.HORIZONTAL);
 
-                tank = new TextView(context);
-                fule = new TextView(context);
+                /*tank = new TextView(context);
+                fule = new TextView(context);*/
                 noz  = new TextView(context);
 
                 param = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,1.0f);
-                tank.setLayoutParams(param);
-                fule.setLayoutParams(param);
+                /*tank.setLayoutParams(param);
+                fule.setLayoutParams(param);*/
                 noz.setLayoutParams(param);
-                noz.setGravity(Gravity.RIGHT);
-                tank.setTextSize(12);
-                fule.setTextSize(12);
+                noz.setGravity(Gravity.LEFT);
+                /*tank.setTextSize(12);
+                fule.setTextSize(12);*/
                 noz.setTextSize(12);
 
                 /*
                 * Set Text view Value
                 * */
-                tank.setText(list.get(position).getTankName());
-                fule.setText(list.get(position).getFuletype());
+                /*tank.setText(list.get(position).getTankName());
+                fule.setText(list.get(position).getFuletype());*/
                 noz.setText(nozzel[i].trim());
 
                 /*
                 * Add textView in Layout
                 * */
-                layout.addView(tank);
-                layout.addView(fule);
+                /*layout.addView(tank);
+                layout.addView(fule);*/
                 layout.addView(noz);
 
                 /*
@@ -106,28 +107,29 @@ public class MappingAdapter extends RecyclerView.Adapter<MappingAdapter.MyViewHo
             layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.HORIZONTAL);
 
-            tank = new TextView(context);
-            fule = new TextView(context);
+            /*tank = new TextView(context);
+            fule = new TextView(context);*/
             noz  = new TextView(context);
 
             param = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT,1.0f);
-            tank.setLayoutParams(param);
-            fule.setLayoutParams(param);
+            /*tank.setLayoutParams(param);
+            fule.setLayoutParams(param);*/
+            noz.setGravity(Gravity.LEFT);
             noz.setLayoutParams(param);
 
             /*
             * Set Text view Value
             * */
-            tank.setText(list.get(position).getTankName());
-            fule.setText(list.get(position).getFuletype());
+            /*tank.setText(list.get(position).getTankName());
+            fule.setText(list.get(position).getFuletype());*/
             noz.setText(list.get(position).getNozzel_name());
 
             /*
             * Add textView in Layout
             * */
-            layout.addView(tank);
-            layout.addView(tank);
-            layout.addView(tank);
+            /*layout.addView(tank);
+            layout.addView(tank);*/
+            layout.addView(noz);
 
             /*
             * Add Layouts on Main Layout

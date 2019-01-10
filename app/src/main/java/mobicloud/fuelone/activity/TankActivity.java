@@ -50,7 +50,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference databaseTank,databaseNozzel;
     private DatabaseReference retriveTank,retriveNozzel;
     private DatabaseReference mappingData;
-    private ArrayList<TankModel> tanklist;
+    private static ArrayList<TankModel> tanklist;
     private ArrayList<MapingModel> mappinglist;
     private ArrayList<NozzelModel> nozzellist;
     private LinearLayout l2, l1;
@@ -101,7 +101,17 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 if(submit.getText().toString().equalsIgnoreCase(context.getResources().getString(R.string._next))){
-                    startActivity(new Intent(TankActivity.this,MappingActivity.class));
+                    if(mappinglist.size()!=0){
+                        Bundle extra = new Bundle();
+                        extra.putSerializable("maplist", mappinglist);
+                        startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                                .putExtra("list",extra));
+                    }else {
+                        Bundle extra = new Bundle();
+                        extra.putSerializable("maplist", mappinglist);
+                        startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                                .putExtra("list",extra));
+                    }
                 }else {
                     SetTankConfig();
                 }
@@ -129,6 +139,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
                     mappinglist.add(mapingModel);
                 }
                 if(mappinglist.size()!=0){
+                    invalidateOptionsMenu();
                     mappingFlag = true;
                     myTankData.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.GONE);
@@ -157,6 +168,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
                 if(tanklist.size()!=0){
+
                     if(mappingFlag){
                         myTankData.setVisibility(View.VISIBLE);
                         l2.setVisibility(View.GONE);
@@ -256,11 +268,22 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             TankModel tankModel = new TankModel();
             tankModel.setUser_id(ManageSession.getPreference(context,"id"));
             tankModel.setTank_id(id);
-            tankModel.setTank_name("Tank_Name "+(i+1));
+            tankModel.setTank_name("Tank "+(i+1));
             tankModel.setTank_title("TankTitle "+(i+1));
             databaseTank.child(id).setValue(tankModel);
         }
-        startActivity(new Intent(TankActivity.this,MappingActivity.class));
+
+        if(mappinglist.size()!=0){
+            Bundle extra = new Bundle();
+            extra.putSerializable("maplist", mappinglist);
+            startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                    .putExtra("list",extra));
+        }else {
+            Bundle extra = new Bundle();
+            extra.putSerializable("maplist", mappinglist);
+            startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                    .putExtra("list",extra));
+        }
     }
 
     /*
@@ -272,7 +295,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             NozzelModel model = new NozzelModel();
             model.setNozzel_id(id);
             model.setUser_id(ManageSession.getPreference(context,"id"));
-            model.setNozzel_name("Nozzel Name "+(i+1));
+            model.setNozzel_name("Nozzel "+(i+1));
             model.setNozzel_title("Nozzel Title "+(i+1));
             databaseNozzel.child(id).setValue(model);
         }
@@ -303,13 +326,24 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
                 l1.setVisibility(View.GONE);
             }
         }
+
+
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater =getMenuInflater();
         inflater.inflate(R.menu._menu, menu);
-        this.OptionMenu = menu;
+        try {
+            if(tanklist.size()==0){
+                menu.getItem(0).setVisible(false);
+            }else {
+                menu.getItem(0).setVisible(true);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -138,6 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         } else {
                             ManageSession.setPreference(context,"id",task.getResult().getUser().getUid().toString());
+                            ManageSession.setPreference(context,"email",task.getResult().getUser().getEmail().toString());
                             Intent intent = new Intent(LoginActivity.this, HomeViewActivity.class);
                             startActivity(intent);
                             finish();

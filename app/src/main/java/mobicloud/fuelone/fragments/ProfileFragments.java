@@ -24,12 +24,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mobicloud.fuelone.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
+import mobicloud.fuelone.model.ProfileModel;
+import mobicloud.fuelone.model.TankModel;
+import mobicloud.fuelone.utils.ManageSession;
 import okhttp3.MultipartBody;
 import mobicloud.fuelone.utils.Constant;
 
@@ -40,12 +49,7 @@ import mobicloud.fuelone.utils.Constant;
 
 public class ProfileFragments extends Fragment {
 
-    /*Response Data Param*/
-    private String CONTENTENCODING = "";
-    private String CONTENTENTYPE = "";
-    private String JSONRESQUESTBEHAVIOR = "";
-    private String MAXJSONLENGHT = "";
-    private String RECURSIONLIMIT = "";
+
 
 
     public static FragmentManager fragmentManager;
@@ -57,9 +61,9 @@ public class ProfileFragments extends Fragment {
     private ImageView editProfileImg, profile_image;
     private EditText name_Edit, lastname_Edit, email_Edit, phone_Edit;
     private TextView updateTxt;
+    private DatabaseReference databaseprofile, retriveprofile;
 
     MultipartBody.Part fileToUpload;
-
     /*For Camera and attechment*/
     String filepath = android.os.Environment.getExternalStorageDirectory()
     + File.separator + "AI LOGISTIC"+ File.separator;
@@ -78,11 +82,13 @@ public class ProfileFragments extends Fragment {
         view=inflater.inflate(R.layout.profile_fragment, container, false);
         initWidgets(view);
         addEventListeners();
+        retriveProfileFromFireBase();
         return view;
     }
 
     private void initWidgets(View view){
 
+        databaseprofile = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"_profile");
         parentlayout    = (RelativeLayout) view.findViewById(R.id.parentlayout);
         editProfileImg  = (ImageView) view.findViewById(R.id.editProfileImg);
         profile_image   = (ImageView) view.findViewById(R.id.profile_image);
@@ -92,6 +98,8 @@ public class ProfileFragments extends Fragment {
         email_Edit      = (EditText) view.findViewById(R.id.email_Edit);
         phone_Edit      = (EditText) view.findViewById(R.id.phone_Edit);
         updateTxt       = (TextView) view.findViewById(R.id.updateTxt);
+
+        email_Edit.setText(ManageSession.getPreference(context,"email"));
 
     }
 
@@ -200,7 +208,14 @@ public class ProfileFragments extends Fragment {
             public void onClick(View v) {
                 if(Constant.isNetworkConnected(getContext())){
                     if(Validation()){
-
+                        String id = databaseprofile.push().getKey();
+                        ProfileModel model = new ProfileModel();
+                        model.setUserId(ManageSession.getPreference(context,"id"));
+                        model.setFirstName(name_Edit.getText().toString());
+                        model.setLastName(lastname_Edit.getText().toString());
+                        model.setEmail(email_Edit.getText().toString());
+                        model.setContactNumber(phone_Edit.getText().toString());
+                        databaseprofile.child(id).setValue(model);
                     }
                 }else {
                     Snackbar.make(parentlayout,"Please check your internet",Snackbar.LENGTH_SHORT).show();
@@ -211,6 +226,37 @@ public class ProfileFragments extends Fragment {
 
     }
 
+    /*
+    * Retrive Data From Firebase
+    * */
+    public void retriveProfileFromFireBase(){
+
+        databaseprofile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    ProfileModel model = postSnapshot.getValue(ProfileModel.class);
+                    if(!model.getEmail().equalsIgnoreCase("")){
+                        SetProfileData(model);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    /*
+    * Set Profile Data
+    * */
+    public void SetProfileData(ProfileModel profileModel){
+        name_Edit.setText(profileModel.getFirstName());
+        lastname_Edit.setText(profileModel.getLastName());
+        email_Edit.setText(profileModel.getEmail());
+        phone_Edit.setText(profileModel.getContactNumber());
+    }
 
     private boolean Validation(){
         if(name_Edit.getText().length()==0){
@@ -235,7 +281,6 @@ public class ProfileFragments extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
     }
 
     /*Image and attechment Result*/

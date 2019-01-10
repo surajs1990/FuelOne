@@ -14,7 +14,6 @@
         android:layout_margin="5dp">
 
         <LinearLayout
-            android:padding="5sp"
             android:background="@color/colorWhite"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -22,11 +21,14 @@
 
 
             <LinearLayout
+                android:padding="5sp"
+                android:background="@color/gray"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:textColor="@color/colorBlack_1000"
                     android:id="@+id/tankNameTxt"
                     android:text="Title"
                     android:textSize="15sp"
@@ -35,6 +37,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:textColor="@color/colorBlack_1000"
                     android:id="@+id/fueltxt"
                     android:gravity="right"
                     android:text="Title"
@@ -48,6 +51,7 @@
 
             <LinearLayout
                 android:layout_marginTop="5sp"
+                android:padding="10sp"
                 android:id="@+id/LayoutOne"
                 android:orientation="vertical"
                 android:layout_width="match_parent"

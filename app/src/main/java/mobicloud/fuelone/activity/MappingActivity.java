@@ -1,7 +1,10 @@
 package mobicloud.fuelone.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -76,6 +79,7 @@ public class MappingActivity extends AppCompatActivity {
         databasenozzel  = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"nozzel_");
         databasemapping = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"mapping_");
 
+        fuleType.add("Select Fule Type");
         fuleType.add("MS");
         fuleType.add("HSD");
         fuleType.add("Speed/Premium MS");
@@ -95,6 +99,9 @@ public class MappingActivity extends AppCompatActivity {
         try{
             Bundle extra = getIntent().getBundleExtra("list");
             mappinglist = (ArrayList<MapingModel>) extra.getSerializable("maplist");
+            /*Toast.makeText(context,""+mappinglist.size()
+                    +"\n"+mappinglist.get(0).getTankName()
+                    +"\n"+mappinglist.get(1).getTankName(),Toast.LENGTH_SHORT).show();*/
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -106,13 +113,30 @@ public class MappingActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
 
+    public void SetTank(String Name){
+        if(Name.equalsIgnoreCase("Select Tank")){
+            new GlideToast.makeToast(MappingActivity.this,"Select Tank", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
+        }else {
+            for(int i=0;i<_tank.size();i++){
+                if(_tank.get(i).getTank_name().equalsIgnoreCase(Name)){
+                    TANKID = _tank.get(i).getTank_id();
+                    TANKNAME =  _tank.get(i).getTank_name();
+                    tankName.setText(TANKNAME);
+                    break;
+                }
+            }
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onStart() {
         super.onStart();
-
+        TankName = new ArrayList<>();
         databaseTank.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -125,18 +149,18 @@ public class MappingActivity extends AppCompatActivity {
                         TankName.add(tank.getTank_name());
                         _tank.add(tank);
                     }
-
                 }
-
                 if(_tank.size()!=0){
                     tankName.setText( _tank.get(0).getTank_name());
                     tank_spinner.setItems(CampareAndRemoveFromList(mappinglist,TankName));
-//                    tank_spinner.setItems(TankName);
+
+                    tank_spinner.getSelectedIndex();
                     tank_spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
                         @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                            TANKID = _tank.get(position).getTank_id();
+                            SetTank(item);
+                            /*TANKID = _tank.get(position).getTank_id();
                             TANKNAME =  _tank.get(position).getTank_name();
-                            tankName.setText(TANKNAME);
+                            tankName.setText(TANKNAME);*/
                         }
                     });
                 }
@@ -153,6 +177,7 @@ public class MappingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 NozzelName = new ArrayList<>();
+                NozzelName.add("Select Nozzel");
                 _nozzel    = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -174,6 +199,24 @@ public class MappingActivity extends AppCompatActivity {
 
             }
         });
+
+
+        if(CampareAndRemoveFromList(mappinglist,TankName).size()==1){
+            submit.setBackgroundColor(R.color.light_gray);
+            submit.setEnabled(false);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("No tanks found!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+
+            AlertDialog alert = builder.create();
+            alert.setTitle("Alert!");
+            alert.show();
+        }
 
     }
 
@@ -203,6 +246,18 @@ public class MappingActivity extends AppCompatActivity {
         String _tankName    = tankName.getText().toString().trim();
         NOZZELNAME          = nozzel_spinner.getSelectedItemsAsString();
 
+
+
+        if (TextUtils.isEmpty(NOZZELNAME)) {
+            new GlideToast.makeToast(MappingActivity.this,"Select Nozzel", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(FUELTYPE) || FUELTYPE.equalsIgnoreCase("Select Fule Type")) {
+            new GlideToast.makeToast(MappingActivity.this,"Select fuel type", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
+            return;
+        }
+
         if (TextUtils.isEmpty(_tankName)) {
             new GlideToast.makeToast(MappingActivity.this,"Enter tank name", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
             return;
@@ -216,12 +271,13 @@ public class MappingActivity extends AppCompatActivity {
         MapingModel mapingModel = new MapingModel();
         mapingModel.setUserId(ManageSession.getPreference(context,"id"));
         mapingModel.setTank_id(TANKID);
-        mapingModel.setTankName(_tankName);
+        mapingModel.setTankName(TANKNAME);
         mapingModel.setNozzel_name(NOZZELNAME);
         mapingModel.setFuletype(FUELTYPE);
         mapingModel.setCapacity(_capacity);
         databasemapping.child(id).setValue(mapingModel);
         finish();
+
     }
 
 
@@ -242,19 +298,24 @@ public class MappingActivity extends AppCompatActivity {
         ArrayList<String> strings = null;
         if(mappinglist.size()!=0){
             strings = new ArrayList<>();
+            strings.add("Select Tank");
             for(int i=0;i<mappinglist.size();i++){
                 for(int j=0;j<list.size();j++){
-                    if(!mappinglist.get(i).getTankName().equalsIgnoreCase(list.get(j))){
-                        strings.add(list.get(j));
+                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getTankName())){
+                        list.remove(j);
                     }
                 }
             }
+            strings.addAll(list);
             return strings;
         }else {
             strings = new ArrayList<>();
+            strings.add("Select Tank");
             strings.addAll(list);
             return strings;
         }
     }
+
+
 
 }

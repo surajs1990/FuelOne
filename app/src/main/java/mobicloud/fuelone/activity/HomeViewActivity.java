@@ -67,7 +67,7 @@ public class HomeViewActivity extends AppCompatActivity
     public static TextView homeTxt, signoutTxt, contactTxt,
             aboutTxt, settingTxt, profileTxt,
             reposrtTxt,
-            nozzelTxt, dipTxt, titleTxt;
+            nozzelTxt, dipTxt, titleTxt, emailTxt;
 
     private final String APP_KEY = "7cfa1df5";
     private final String FALLBACK_USER_ID = "userId";
@@ -117,6 +117,7 @@ public class HomeViewActivity extends AppCompatActivity
         navigationView  = (NavigationView) findViewById(R.id.nav_view);
 
 
+        emailTxt        = (TextView) findViewById(R.id.emailTxt);
         homeTxt         = (TextView) findViewById(R.id.homeTxt);
         signoutTxt      = (TextView) findViewById(R.id.signoutTxt);
         contactTxt      = (TextView) findViewById(R.id.contactTxt);
@@ -131,6 +132,7 @@ public class HomeViewActivity extends AppCompatActivity
         drawer.setViewScale(Gravity.START, 0.9f);
         drawer.setViewElevation(Gravity.START, 20);
         drawer.useCustomBehavior(Gravity.END);
+        emailTxt.setText(ManageSession.getPreference(context,"email"));
 
 //        callFragment();
 
