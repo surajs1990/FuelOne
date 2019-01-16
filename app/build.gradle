@@ -90,7 +90,11 @@ dependencies {
 //    implementation 'com.google.firebase:firebase-core:16.0.1'
     compile 'io.apptik.widget:multiselectspinner:1.0.12'
 
+    /*implementation 'com.google.firebase:firebase-storage:10.0.1'
+    implementation 'com.google.firebase:firebase-auth:10.0.1'
+    implementation 'com.google.firebase:firebase-database:10.0.1'*/
 
+    implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
 

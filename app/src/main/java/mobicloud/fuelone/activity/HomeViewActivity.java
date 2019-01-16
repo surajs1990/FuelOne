@@ -226,6 +226,7 @@ public class HomeViewActivity extends AppCompatActivity
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     signOut();
+                                    ManageSession.getClearPreference(context);
                                     startActivity(new Intent(HomeViewActivity.this,LoginActivity.class));
                                     finish();
                                 }

@@ -37,7 +37,11 @@
 
         <activity android:name="mobicloud.fuelone.activity.MappingActivity"
             android:theme="@style/AppTheme12"/>
+
         <activity android:name="mobicloud.fuelone.activity.TankActivity"
+            android:theme="@style/AppTheme12"/>
+
+        <activity android:name="mobicloud.fuelone.activity.TankExelActivity"
             android:theme="@style/AppTheme12"/>
 
         <activity

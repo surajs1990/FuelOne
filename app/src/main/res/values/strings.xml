@@ -17,6 +17,7 @@
     <string name="finished">FINISHED</string>
     <string name="contact_no">Contact No</string>
     <string name="update">UPDATE</string>
+    <string name="save">SAVE</string>
 
     <!--Setting -->
     <string name="tank_config">Tank Config</string>
@@ -81,6 +82,8 @@
     <string name="comment">Comment</string>
     <string name="received">RECEIVED</string>
     <string name="_submit">SUBMIT</string>
+    <string name="_view">VIEW</string>
+    <string name="_select">SELECT</string>
     <string name="_chart">DIP CHART</string>
     <string name="_next">NEXT</string>
     <string name="damaged">DAMAGED</string>

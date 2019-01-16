@@ -29,9 +29,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jeevandeshmukh.glidetoastlib.GlideToast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import mobicloud.fuelone.adapter.MappingAdapter;
+import mobicloud.fuelone.model.FileModel;
 import mobicloud.fuelone.model.MapingModel;
 import mobicloud.fuelone.model.NozzelModel;
 import mobicloud.fuelone.model.TankModel;
@@ -41,7 +44,7 @@ import mobicloud.fuelone.utils.ManageSession;
 public class TankActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context context;
-    private LinearLayout parentlayout;
+    private LinearLayout parentlayout, addLayout;
     private ImageView plusImage;
     private EditText numberOfTank, numberOfNozzel;
     private TextView submit;
@@ -49,6 +52,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar progressBar;
     private DatabaseReference databaseTank,databaseNozzel;
     private DatabaseReference retriveTank,retriveNozzel;
+    private DatabaseReference tank_config;
     private DatabaseReference mappingData;
     private static ArrayList<TankModel> tanklist;
     private ArrayList<MapingModel> mappinglist;
@@ -59,6 +63,13 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     private MappingAdapter adapter;
     private boolean mappingFlag;
 
+
+    private String[] title ={"DipChart10kl",
+    "DipChart15kl","DipChart20kl"};
+    private String[] urls ={"https://firebasestorage.googleapis.com/v0/b/fuelone-4a4e9.appspot.com/o/DipChart10kl.xlsx?alt=media&token=ae9b5c6d-52d6-4b1a-a2b5-4ffd4679a6d7"
+    ,"https://firebasestorage.googleapis.com/v0/b/fuelone-4a4e9.appspot.com/o/DipChart15kl.xlsx?alt=media&token=265f193e-c3c9-4f59-a75a-4848de5028a6"
+    ,"https://firebasestorage.googleapis.com/v0/b/fuelone-4a4e9.appspot.com/o/DipChart20kl.xlsx?alt=media&token=7be1f210-10a9-4798-802b-982f7a8cdc87"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +77,6 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
         setTitle("Tank Config");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initWidgets();
-        addEventListeners();
     }
 
     /*Declare widgtes*/
@@ -74,6 +84,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
 
         context                 = this;
         auth = FirebaseAuth.getInstance();
+        tank_config             = FirebaseDatabase.getInstance().getReference("_tank_config");
 
         databaseTank            = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"tank_");
         databaseNozzel          = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"nozzel_");
@@ -88,45 +99,31 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
         numberOfNozzel          = (EditText) findViewById(R.id.numberOfNozzel);
         submit                  = (TextView) findViewById(R.id.submit);
         parentlayout            = (LinearLayout) findViewById(R.id.parentlayout);
+        addLayout               = (LinearLayout) findViewById(R.id.addLayout);
         l2                      = (LinearLayout) findViewById(R.id.l2);
         l1                      = (LinearLayout) findViewById(R.id.l1);
 
+        getFirebaseData();
         plusImage.setOnClickListener(this);
+        submit.setOnClickListener(this);
+        addLayout.setOnClickListener(this);
+   }
 
-    }
 
-    /*Click Listener function*/
-    private void addEventListeners(){
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(submit.getText().toString().equalsIgnoreCase(context.getResources().getString(R.string._next))){
-                    if(mappinglist.size()!=0){
-                        Bundle extra = new Bundle();
-                        extra.putSerializable("maplist", mappinglist);
-                        startActivity(new Intent(TankActivity.this,MappingActivity.class)
-                                .putExtra("list",extra));
-                    }else {
-                        Bundle extra = new Bundle();
-                        extra.putSerializable("maplist", mappinglist);
-                        startActivity(new Intent(TankActivity.this,MappingActivity.class)
-                                .putExtra("list",extra));
-                    }
-                }else {
-                    SetTankConfig();
-                }
-            }
-        });
-    }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+
+
+    /*
+    * Get ALL Data from Firebase
+    * */
+    public void getFirebaseData(){
 
         progressBar.setVisibility(View.VISIBLE);
         mappingData.addValueEventListener(new ValueEventListener() {
@@ -139,7 +136,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
                     mappinglist.add(mapingModel);
                 }
                 if(mappinglist.size()!=0){
-                    invalidateOptionsMenu();
+
                     mappingFlag = true;
                     myTankData.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.GONE);
@@ -181,7 +178,9 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
                     numberOfTank.setText(""+tanklist.size());
                     numberOfTank.setEnabled(false);
                     numberOfNozzel.setEnabled(false);
+                    addLayout.setVisibility(View.VISIBLE);
                 }else {
+                    addLayout.setVisibility(View.GONE);
                     l2.setVisibility(View.GONE);
                     l1.setVisibility(View.VISIBLE);
                     numberOfTank.setEnabled(true);
@@ -220,12 +219,13 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
+
         });
 
-
+        this.invalidateOptionsMenu();
     }
+
 
     /*
     * Set Data Adapter
@@ -236,7 +236,19 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
         myTankData.setLayoutManager(mLayoutManager);
         myTankData.setItemAnimator(new DefaultItemAnimator());
         myTankData.setAdapter(adapter);
+    }
 
+
+    /*
+    * insert Data
+    * */
+    public void InsertData(){
+        for(int i=0;i<urls.length;i++){
+            FileModel model = new FileModel();
+            model.setFileName(title[i]);
+            model.setFileUrl(urls[i]);
+            tank_config.child(tank_config.push().getKey()).setValue(model);
+        }
     }
 
     /*
@@ -256,6 +268,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
         }
         setTank(Integer.parseInt(no_tank));
         setNozzel(Integer.parseInt(no_nozzel));
+
     }
 
 
@@ -263,6 +276,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     * Set Model to send over Database
     * */
     public void setTank(int tank){
+
         for(int i=0;i<tank;i++){
             String id = databaseTank.push().getKey();
             TankModel tankModel = new TankModel();
@@ -284,6 +298,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(TankActivity.this,MappingActivity.class)
                     .putExtra("list",extra));
         }
+
     }
 
     /*
@@ -320,13 +335,11 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(TankActivity.this,MappingActivity.class)
                     .putExtra("list",extra));
                 }
-
             }else {
                 l2.setVisibility(View.VISIBLE);
                 l1.setVisibility(View.GONE);
             }
         }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -335,7 +348,9 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater =getMenuInflater();
         inflater.inflate(R.menu._menu, menu);
-        try {
+        menu.getItem(0).setVisible(false);
+
+        /*try {
             if(tanklist.size()==0){
                 menu.getItem(0).setVisible(false);
             }else {
@@ -343,7 +358,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             }
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -368,6 +383,40 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
         if(v.getId()==R.id.plusImage){
             l2.setVisibility(View.VISIBLE);
             l1.setVisibility(View.GONE);
+        }
+        if(v.getId() == R.id.submit){
+            if(submit.getText().toString().equalsIgnoreCase(context.getResources().getString(R.string._next))){
+                if(mappinglist.size()!=0){
+                    Bundle extra = new Bundle();
+                    extra.putSerializable("maplist", mappinglist);
+                    startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                            .putExtra("list",extra));
+                }else {
+                    Bundle extra = new Bundle();
+                    extra.putSerializable("maplist", mappinglist);
+                    startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                            .putExtra("list",extra));
+                }
+            }else {
+                SetTankConfig();
+            }
+        }if(v.getId() == R.id.addLayout){
+            if(tanklist.size()!=0){
+                if(mappinglist.size()!=0){
+                    Bundle extra = new Bundle();
+                    extra.putSerializable("maplist", mappinglist);
+                    startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                            .putExtra("list",extra));
+                }else {
+                    Bundle extra = new Bundle();
+                    extra.putSerializable("maplist", mappinglist);
+                    startActivity(new Intent(TankActivity.this,MappingActivity.class)
+                            .putExtra("list",extra));
+                }
+            }else {
+                l2.setVisibility(View.VISIBLE);
+                l1.setVisibility(View.GONE);
+            }
         }
     }
 }

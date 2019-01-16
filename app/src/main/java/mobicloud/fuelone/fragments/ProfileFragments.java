@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.firebase.database.DataSnapshot;
@@ -49,9 +50,6 @@ import mobicloud.fuelone.utils.Constant;
 
 public class ProfileFragments extends Fragment {
 
-
-
-
     public static FragmentManager fragmentManager;
     public static Fragment fragment;
     public static View view;
@@ -62,11 +60,13 @@ public class ProfileFragments extends Fragment {
     private EditText name_Edit, lastname_Edit, email_Edit, phone_Edit;
     private TextView updateTxt;
     private DatabaseReference databaseprofile, retriveprofile;
+    private boolean editFlage;
+    private String  profileID;
 
     MultipartBody.Part fileToUpload;
     /*For Camera and attechment*/
     String filepath = android.os.Environment.getExternalStorageDirectory()
-    + File.separator + "AI LOGISTIC"+ File.separator;
+    + File.separator + "FUELONE"+ File.separator;
     public static String fileActualPath = null;
     public static String fileName;
 
@@ -206,19 +206,35 @@ public class ProfileFragments extends Fragment {
         updateTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Constant.isNetworkConnected(getContext())){
-                    if(Validation()){
-                        String id = databaseprofile.push().getKey();
-                        ProfileModel model = new ProfileModel();
-                        model.setUserId(ManageSession.getPreference(context,"id"));
-                        model.setFirstName(name_Edit.getText().toString());
-                        model.setLastName(lastname_Edit.getText().toString());
-                        model.setEmail(email_Edit.getText().toString());
-                        model.setContactNumber(phone_Edit.getText().toString());
-                        databaseprofile.child(id).setValue(model);
+                if(editFlage){
+                    if(Constant.isNetworkConnected(getContext())){
+                        if(Validation()){
+                            ProfileModel model = new ProfileModel();
+                            model.setUserId(ManageSession.getPreference(context,"id"));
+                            model.setFirstName(name_Edit.getText().toString());
+                            model.setLastName(lastname_Edit.getText().toString());
+                            model.setEmail(email_Edit.getText().toString());
+                            model.setContactNumber(phone_Edit.getText().toString());
+                            databaseprofile.child(profileID).setValue(model);
+                        }
+                    }else {
+                        Snackbar.make(parentlayout,"Please check your internet",Snackbar.LENGTH_SHORT).show();
                     }
                 }else {
-                    Snackbar.make(parentlayout,"Please check your internet",Snackbar.LENGTH_SHORT).show();
+                    if(Constant.isNetworkConnected(getContext())){
+                        if(Validation()){
+                            String id = databaseprofile.push().getKey();
+                            ProfileModel model = new ProfileModel();
+                            model.setUserId(ManageSession.getPreference(context,"id"));
+                            model.setFirstName(name_Edit.getText().toString());
+                            model.setLastName(lastname_Edit.getText().toString());
+                            model.setEmail(email_Edit.getText().toString());
+                            model.setContactNumber(phone_Edit.getText().toString());
+                            databaseprofile.child(id).setValue(model);
+                        }
+                    }else {
+                        Snackbar.make(parentlayout,"Please check your internet",Snackbar.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -235,6 +251,7 @@ public class ProfileFragments extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    profileID = postSnapshot.getKey();
                     ProfileModel model = postSnapshot.getValue(ProfileModel.class);
                     if(!model.getEmail().equalsIgnoreCase("")){
                         SetProfileData(model);
@@ -252,6 +269,8 @@ public class ProfileFragments extends Fragment {
     * Set Profile Data
     * */
     public void SetProfileData(ProfileModel profileModel){
+        editFlage = true;
+        updateTxt.setText(context.getResources().getString(R.string.update));
         name_Edit.setText(profileModel.getFirstName());
         lastname_Edit.setText(profileModel.getLastName());
         email_Edit.setText(profileModel.getEmail());

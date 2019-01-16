@@ -35,6 +35,22 @@ public class MapingModel implements Serializable {
     @Expose
     private String capacity;
 
+    @SerializedName("sheet")
+    @Expose
+    private String sheet;
+
+    @SerializedName("sheetUrl")
+    @Expose
+    private String sheetUrl;
+
+    public String getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(String sheet) {
+        this.sheet = sheet;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -83,6 +99,14 @@ public class MapingModel implements Serializable {
         this.capacity = capacity;
     }
 
+    public String getSheetUrl() {
+        return sheetUrl;
+    }
+
+    public void setSheetUrl(String sheetUrl) {
+        this.sheetUrl = sheetUrl;
+    }
+
     @Override
     public String toString() {
         return "MapingModel{" +
@@ -92,6 +116,8 @@ public class MapingModel implements Serializable {
                 ", nozzel_name='" + nozzel_name + '\'' +
                 ", fuletype='" + fuletype + '\'' +
                 ", capacity='" + capacity + '\'' +
+                ", sheet='" + sheet + '\'' +
+                ", sheetUrl='" + sheetUrl + '\'' +
                 '}';
     }
 }

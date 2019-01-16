@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,7 +55,8 @@ public class MappingActivity extends AppCompatActivity {
     private ArrayList<NozzelModel> _nozzel;
 
     private DatabaseReference databaseTank, databasenozzel, databasemapping;
-    private EditText capacity, tankName;
+    private EditText capacity, tankName, chartEdit;
+    private String CHARTURL;
 
     private String TANKID, TANKNAME, TANKTITLE, NOZZELID, NOZZELNAME, FUELTYPE;
 
@@ -95,6 +97,7 @@ public class MappingActivity extends AppCompatActivity {
         chart                   = (TextView) findViewById(R.id.chart);
         capacity                = (EditText) findViewById(R.id.capacity);
         tankName                = (EditText) findViewById(R.id.tankName);
+        chartEdit               = (EditText) findViewById(R.id.chartEdit);
 
         try{
             Bundle extra = getIntent().getBundleExtra("list");
@@ -106,6 +109,7 @@ public class MappingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        GetFirebaseData();
         fuleType_spinner.setItems(fuleType);
         fuleType_spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -114,6 +118,18 @@ public class MappingActivity extends AppCompatActivity {
         });
 
 
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 2) {
+            String mane = data.getStringExtra( "name");
+            chartEdit.setText(""+mane);
+            CHARTURL    = data.getStringExtra( "url");
+        }
     }
 
 
@@ -136,6 +152,16 @@ public class MappingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
+    }
+
+
+    /*
+    * Get Firebase Data
+    * */
+    private void GetFirebaseData(){
+
         TankName = new ArrayList<>();
         databaseTank.addValueEventListener(new ValueEventListener() {
             @Override
@@ -150,8 +176,9 @@ public class MappingActivity extends AppCompatActivity {
                         _tank.add(tank);
                     }
                 }
-                if(_tank.size()!=0){
-                    tankName.setText( _tank.get(0).getTank_name());
+                if(TankName.size()!=0){
+                    tankName.setText( TankName.get(0));
+                    Log.e("","Size : "+TankName.size());
                     tank_spinner.setItems(CampareAndRemoveFromList(mappinglist,TankName));
 
                     tank_spinner.getSelectedIndex();
@@ -177,7 +204,6 @@ public class MappingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 NozzelName = new ArrayList<>();
-                NozzelName.add("Select Nozzel");
                 _nozzel    = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -188,9 +214,9 @@ public class MappingActivity extends AppCompatActivity {
                     }
                 }
 
-                if(_nozzel.size()!=0){
-                    spinner.setItems(NozzelName);
-                    nozzel_spinner.setItems(NozzelName);
+                if(NozzelName.size()!=0){
+                    spinner.setItems(RemoveNozzelFromList(mappinglist,NozzelName));
+                    nozzel_spinner.setItems(RemoveNozzelFromList(mappinglist,NozzelName));
                 }
 
             }
@@ -201,7 +227,7 @@ public class MappingActivity extends AppCompatActivity {
         });
 
 
-        if(CampareAndRemoveFromList(mappinglist,TankName).size()==1){
+        /*if(CampareAndRemoveFromList(mappinglist,TankName).size()==1){
             submit.setBackgroundColor(R.color.light_gray);
             submit.setEnabled(false);
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -216,17 +242,16 @@ public class MappingActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.setTitle("Alert!");
             alert.show();
-        }
-
+        }*/
     }
 
     /*Click Listener function*/
     private void addEventListeners(){
 
-        chart.setOnClickListener(new View.OnClickListener() {
+        chartEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,""+nozzel_spinner.getSelectedItemsAsString(),Toast.LENGTH_SHORT).show();
+                startActivityForResult(new Intent(MappingActivity.this, TankExelActivity.class),101);
             }
         });
 
@@ -247,7 +272,6 @@ public class MappingActivity extends AppCompatActivity {
         NOZZELNAME          = nozzel_spinner.getSelectedItemsAsString();
 
 
-
         if (TextUtils.isEmpty(NOZZELNAME)) {
             new GlideToast.makeToast(MappingActivity.this,"Select Nozzel", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
             return;
@@ -266,6 +290,11 @@ public class MappingActivity extends AppCompatActivity {
             new GlideToast.makeToast(MappingActivity.this,"Enter capacity", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
             return;
         }
+        if (TextUtils.isEmpty(chartEdit.getText().toString())) {
+            new GlideToast.makeToast(MappingActivity.this,"Please select chart", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
+            return;
+        }
+
 
         String id = databasemapping.push().getKey();
         MapingModel mapingModel = new MapingModel();
@@ -275,6 +304,8 @@ public class MappingActivity extends AppCompatActivity {
         mapingModel.setNozzel_name(NOZZELNAME);
         mapingModel.setFuletype(FUELTYPE);
         mapingModel.setCapacity(_capacity);
+        mapingModel.setSheet(chartEdit.getText().toString());
+        mapingModel.setSheetUrl(CHARTURL);
         databasemapping.child(id).setValue(mapingModel);
         finish();
 
@@ -294,6 +325,7 @@ public class MappingActivity extends AppCompatActivity {
     /*
     * Filter Data
     * */
+    @SuppressLint("ResourceAsColor")
     public ArrayList<String> CampareAndRemoveFromList(ArrayList<MapingModel> mappinglist, ArrayList<String> list){
         ArrayList<String> strings = null;
         if(mappinglist.size()!=0){
@@ -307,11 +339,104 @@ public class MappingActivity extends AppCompatActivity {
                 }
             }
             strings.addAll(list);
+            if(strings.size()==1){
+                submit.setBackgroundColor(R.color.light_gray);
+                submit.setEnabled(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("We have configured all tank with nozzels.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.setTitle("Alert!");
+                alert.show();
+            }
             return strings;
         }else {
             strings = new ArrayList<>();
             strings.add("Select Tank");
             strings.addAll(list);
+            if(strings.size()==1){
+                submit.setBackgroundColor(R.color.light_gray);
+                submit.setEnabled(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("We have configured all tank with nozzels.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.setTitle("Alert!");
+                alert.show();
+            }
+            return strings;
+        }
+    }
+
+
+    @SuppressLint("ResourceAsColor")
+    public ArrayList<String>  RemoveNozzelFromList(ArrayList<MapingModel> mappinglist, ArrayList<String> list){
+        ArrayList<String> strings = null;
+        if(mappinglist.size()!=0){
+            strings = new ArrayList<>();
+            strings.add("Select Nozzel");
+            for(int i=0;i<mappinglist.size();i++){
+                for(int j=0;j<list.size();j++){
+                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getNozzel_name())){
+                        list.remove(j);
+                    }
+                }
+            }
+            int sum = list.size();
+            strings.addAll(list);
+            if(strings.size()==1){
+                submit.setBackgroundColor(R.color.light_gray);
+                submit.setEnabled(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("We have configured all tank with nozzels.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.setTitle("Alert!");
+                alert.show();
+            }
+            return strings;
+        }else {
+            strings = new ArrayList<>();
+            strings.add("Select Nozzel");
+            strings.addAll(list);
+            if(strings.size()==1){
+                submit.setBackgroundColor(R.color.light_gray);
+                submit.setEnabled(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("We have configured all tank with nozzels.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.setTitle("Alert!");
+                alert.show();
+            }
             return strings;
         }
     }
