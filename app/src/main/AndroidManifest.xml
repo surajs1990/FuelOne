@@ -44,6 +44,9 @@
         <activity android:name="mobicloud.fuelone.activity.TankExelActivity"
             android:theme="@style/AppTheme12"/>
 
+        <activity android:name="mobicloud.fuelone.activity.DipEntryActivity"
+            android:theme="@style/AppTheme12"/>
+
         <activity
             android:name="com.ironsource.sdk.controller.ControllerActivity"
             android:configChanges="orientation|screenSize"

@@ -50,9 +50,9 @@ public class MappingAdapter extends RecyclerView.Adapter<MappingAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.tankNameTxt.setText(list.get(position).getTankName());
+        holder.tankNameTxt.setText(list.get(position).getTankDipName());
         holder.fueltxt.setText(list.get(position).getFuletype());
-        holder.LayoutOne.setPadding(2,2, 2 ,2);
+        holder.LayoutOne.setPadding(10,2, 2 ,2);
 
         String[] nozzel=null;
         try {

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ public class ProfileFragments extends Fragment {
     private TextView updateTxt;
     private DatabaseReference databaseprofile, retriveprofile;
     private boolean editFlage;
+    private ProgressBar progressBar;
     private String  profileID;
 
     MultipartBody.Part fileToUpload;
@@ -88,7 +90,7 @@ public class ProfileFragments extends Fragment {
 
     private void initWidgets(View view){
 
-        databaseprofile = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"_profile");
+        databaseprofile = FirebaseDatabase.getInstance().getReference("profile").child(ManageSession.getPreference(context,"id"));
         parentlayout    = (RelativeLayout) view.findViewById(R.id.parentlayout);
         editProfileImg  = (ImageView) view.findViewById(R.id.editProfileImg);
         profile_image   = (ImageView) view.findViewById(R.id.profile_image);
@@ -98,6 +100,7 @@ public class ProfileFragments extends Fragment {
         email_Edit      = (EditText) view.findViewById(R.id.email_Edit);
         phone_Edit      = (EditText) view.findViewById(R.id.phone_Edit);
         updateTxt       = (TextView) view.findViewById(R.id.updateTxt);
+        progressBar     = (ProgressBar) view.findViewById(R.id.progressBar);
 
         email_Edit.setText(ManageSession.getPreference(context,"email"));
 
@@ -246,10 +249,11 @@ public class ProfileFragments extends Fragment {
     * Retrive Data From Firebase
     * */
     public void retriveProfileFromFireBase(){
-
+        progressBar.setVisibility(View.VISIBLE);
         databaseprofile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressBar.setVisibility(View.GONE);
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     profileID = postSnapshot.getKey();
                     ProfileModel model = postSnapshot.getValue(ProfileModel.class);
@@ -269,6 +273,7 @@ public class ProfileFragments extends Fragment {
     * Set Profile Data
     * */
     public void SetProfileData(ProfileModel profileModel){
+        progressBar.setVisibility(View.GONE);
         editFlage = true;
         updateTxt.setText(context.getResources().getString(R.string.update));
         name_Edit.setText(profileModel.getFirstName());

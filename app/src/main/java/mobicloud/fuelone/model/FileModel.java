@@ -11,35 +11,35 @@ import java.io.Serializable;
 
 public class FileModel implements Serializable {
 
-    @SerializedName("fileName")
+    @SerializedName("dipChartName")
     @Expose
-    private String fileName;
+    private String dipChartName;
 
-    @SerializedName("fileUrl")
+    @SerializedName("dipChartURL")
     @Expose
-    private String fileUrl;
+    private String dipChartURL;
 
-    public String getFileName() {
-        return fileName;
+    public String getDipChartName() {
+        return dipChartName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setDipChartName(String dipChartName) {
+        this.dipChartName = dipChartName;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public String getDipChartURL() {
+        return dipChartURL;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setDipChartURL(String dipChartURL) {
+        this.dipChartURL = dipChartURL;
     }
 
     @Override
     public String toString() {
         return "FileModel{" +
-                "fileName='" + fileName + '\'' +
-                ", fileUrl='" + fileUrl + '\'' +
+                "dipChartName='" + dipChartName + '\'' +
+                ", dipChartURL='" + dipChartURL + '\'' +
                 '}';
     }
 }

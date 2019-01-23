@@ -10,9 +10,9 @@
 
     <style name="AppTheme12" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/oreng_bg</item>
+        <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryDark">@color/oreng_bg</item>
-        <item name="colorAccent">@color/oreng_bg</item>
+        <item name="colorAccent">@color/orange</item>
         <item name="android:textColorPrimary">@color/text_color</item>
 
         <!-- Applies to views in their activated state (i.e checked or switches) -->

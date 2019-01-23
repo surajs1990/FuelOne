@@ -32,8 +32,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -89,7 +92,7 @@ public class TankExelActivity extends AppCompatActivity implements View.OnClickL
         mStorageReference       = FirebaseStorage.getInstance().getReference();
         mappingData             = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"mapping_");
 
-        mDatabaseReference      = FirebaseDatabase.getInstance().getReference("_tank_config");
+        mDatabaseReference      = FirebaseDatabase.getInstance().getReference("dip_Chart");
         progressBar             = (ProgressBar) findViewById(R.id.progressBar);
         parentlayout            = (RelativeLayout) findViewById(R.id.parentlayout);
         exelListData            = (RecyclerView) findViewById(R.id.exelListData);
@@ -166,7 +169,7 @@ public class TankExelActivity extends AppCompatActivity implements View.OnClickL
 
 
     //this function will get the pdf from the storage
-    private void getPDF() {
+    private void getSheet() {
         //for greater than lolipop versions we need the permissions asked on runtime
         //so if the permission is not available user will go to the screen to allow storage permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
@@ -188,35 +191,32 @@ public class TankExelActivity extends AppCompatActivity implements View.OnClickL
 
     private void Uploadfile(Uri data, final String Name){
         progressBar.setVisibility(View.VISIBLE);
-        StorageReference sRef = mStorageReference.child(""+Name+".xlsx");
-        sRef.putFile(data)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @SuppressWarnings("VisibleForTests")
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressBar.setVisibility(View.GONE);
-                        FileModel model = new FileModel();
-                        model.setFileName(Name);
-                        model.setFileUrl( taskSnapshot.getStorage().getRoot().getDownloadUrl().toString());
-                        Toast.makeText(context,taskSnapshot.getStorage().getDownloadUrl().getResult().toString(),Toast.LENGTH_SHORT).show();
-                        Log.e("",""+taskSnapshot.getStorage().getPath().toString());
-                        mDatabaseReference.child(mDatabaseReference.push().getKey()).setValue(model);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @SuppressWarnings("VisibleForTests")
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//                        textViewStatus.setText((int) progress + "% Uploading...");
-                    }
-                });
+        final StorageReference sRef = mStorageReference.child(""+Name+".xlsx");
+
+        sRef.putFile(data).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()){
+                    throw task.getException();
+                }
+                return sRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Uri downUri = task.getResult();
+                    Log.d("", "onComplete: Url: "+ downUri.toString());
+                    progressBar.setVisibility(View.GONE);
+                    FileModel model = new FileModel();
+                    model.setDipChartName(Name);
+                    model.setDipChartURL( downUri.toString());
+                    Log.e("",""+downUri.toString());
+                    mDatabaseReference.child(mDatabaseReference.push().getKey()).setValue(model);
+                }
+            }
+        });
+
     }
 
 
@@ -227,7 +227,7 @@ public class TankExelActivity extends AppCompatActivity implements View.OnClickL
         if (id == android.R.id.home) {
             onBackPressed();
         }if (id == R.id.addFileMenu) {
-//            getPDF();
+            getSheet();
         }
         return super.onOptionsItemSelected(item);
     }

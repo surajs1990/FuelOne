@@ -29,6 +29,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.jeevandeshmukh.glidetoastlib.GlideToast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 import mobicloud.fuelone.adapter.MultiSelectionSpinner;
@@ -77,9 +78,9 @@ public class MappingActivity extends AppCompatActivity {
         activity                = this;
         fuleType                = new ArrayList<>();
 
-        databaseTank    = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"tank_");
-        databasenozzel  = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"nozzel_");
-        databasemapping = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"mapping_");
+        databaseTank    = FirebaseDatabase.getInstance().getReference("tank_config").child(ManageSession.getPreference(context,"id"));
+        databasenozzel  = FirebaseDatabase.getInstance().getReference("nozzel_config").child(ManageSession.getPreference(context,"id"));
+        databasemapping = FirebaseDatabase.getInstance().getReference("tank_nozzel_mapping").child(ManageSession.getPreference(context,"id"));
 
         fuleType.add("Select Fule Type");
         fuleType.add("MS");
@@ -114,6 +115,9 @@ public class MappingActivity extends AppCompatActivity {
         fuleType_spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 FUELTYPE = fuleType.get(position);
+                if(!FUELTYPE.equalsIgnoreCase("Select Fule Type")){
+                    tankName.setText(TANKNAME+" DIP "+FUELTYPE);
+                }
             }
         });
 
@@ -141,7 +145,7 @@ public class MappingActivity extends AppCompatActivity {
                 if(_tank.get(i).getTank_name().equalsIgnoreCase(Name)){
                     TANKID = _tank.get(i).getTank_id();
                     TANKNAME =  _tank.get(i).getTank_name();
-                    tankName.setText(TANKNAME);
+                    tankName.setText(TANKNAME +" DIP");
                     break;
                 }
             }
@@ -177,7 +181,7 @@ public class MappingActivity extends AppCompatActivity {
                     }
                 }
                 if(TankName.size()!=0){
-                    tankName.setText( TankName.get(0));
+//                    tankName.setText( TankName.get(0));
                     Log.e("","Size : "+TankName.size());
                     tank_spinner.setItems(CampareAndRemoveFromList(mappinglist,TankName));
 
@@ -215,8 +219,7 @@ public class MappingActivity extends AppCompatActivity {
                 }
 
                 if(NozzelName.size()!=0){
-                    spinner.setItems(RemoveNozzelFromList(mappinglist,NozzelName));
-                    nozzel_spinner.setItems(RemoveNozzelFromList(mappinglist,NozzelName));
+                    nozzel_spinner.setItems(RemoveNozzelFromList(getNozzels(mappinglist),NozzelName));
                 }
 
             }
@@ -295,20 +298,19 @@ public class MappingActivity extends AppCompatActivity {
             return;
         }
 
-
         String id = databasemapping.push().getKey();
         MapingModel mapingModel = new MapingModel();
         mapingModel.setUserId(ManageSession.getPreference(context,"id"));
         mapingModel.setTank_id(TANKID);
-        mapingModel.setTankName(TANKNAME);
+        mapingModel.setTankDipName(_tankName);
         mapingModel.setNozzel_name(NOZZELNAME);
         mapingModel.setFuletype(FUELTYPE);
         mapingModel.setCapacity(_capacity);
         mapingModel.setSheet(chartEdit.getText().toString());
         mapingModel.setSheetUrl(CHARTURL);
         databasemapping.child(id).setValue(mapingModel);
-        finish();
 
+        finish();
     }
 
 
@@ -333,7 +335,7 @@ public class MappingActivity extends AppCompatActivity {
             strings.add("Select Tank");
             for(int i=0;i<mappinglist.size();i++){
                 for(int j=0;j<list.size();j++){
-                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getTankName())){
+                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getTankDipName())){
                         list.remove(j);
                     }
                 }
@@ -373,7 +375,6 @@ public class MappingActivity extends AppCompatActivity {
                                 finish();
                             }
                         });
-
                 AlertDialog alert = builder.create();
                 alert.setTitle("Alert!");
                 alert.show();
@@ -383,15 +384,30 @@ public class MappingActivity extends AppCompatActivity {
     }
 
 
+    public ArrayList<String> getNozzels(ArrayList<MapingModel> mappinglist){
+        ArrayList<String> nozzels = new ArrayList<>();
+        for(int i=0;i<mappinglist.size();i++){
+            try{
+                String[] s = mappinglist.get(i).getNozzel_name().split(",");
+                nozzels.addAll(Arrays.asList(s));
+            }catch (Exception e){
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return nozzels;
+    }
+
+
     @SuppressLint("ResourceAsColor")
-    public ArrayList<String>  RemoveNozzelFromList(ArrayList<MapingModel> mappinglist, ArrayList<String> list){
+    public ArrayList<String>  RemoveNozzelFromList(ArrayList<String> mappinglist, ArrayList<String> list){
         ArrayList<String> strings = null;
         if(mappinglist.size()!=0){
             strings = new ArrayList<>();
             strings.add("Select Nozzel");
             for(int i=0;i<mappinglist.size();i++){
                 for(int j=0;j<list.size();j++){
-                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getNozzel_name())){
+                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).trim())){
                         list.remove(j);
                     }
                 }

@@ -5,7 +5,7 @@
     <string name="splash_txt">AI LOGISTICS</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
-
+    <string name="_enter_value">Please Enter Value</string>
     <string name="_continue">CONTINUE</string>
     <string name="_enter_RO">Please Enter RO ID</string>
     <string name="_RO">RO ID</string>
@@ -28,6 +28,8 @@
 
     <!--Tank Config-->
     <string name="configured_tank">Please configured your fuel\ntank and nozzles.</string>
+    <string name="configured_dip">We don\'t have any entry to show here. \nPlease add dip record.</string>
+    <string name="_dip_txt">You don\'t have configured tank with nozzels. \nPlease check setting section.</string>
     <string name="number_of_tank">Number Of Tank</string>
     <string name="number_of_nozzel">Number Of Nozzel</string>
 
@@ -50,13 +52,13 @@
     <string name="signOut">SignOut</string>
 
     <string name="_contact">CONTACT US</string>
-    <string name="_dip">Dip</string>
+    <string name="_dip">Dip Entry</string>
     <string name="_nozzel">Nozzel</string>
     <string name="_report">Report</string>
     <string name="_contact_us">Contact Us</string>
     <string name="_about_us">About Us</string>
     <string name="_profile">Profile</string>
-    <string name="_setting">Transaction</string>
+    <string name="_setting">Settings</string>
     <string name="setting">TRANSACTION</string>
 
     <string name="take_picture">Take Picture</string>

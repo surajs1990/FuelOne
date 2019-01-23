@@ -11,9 +11,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
-        ndk {
+        /*ndk {
             abiFilters "armeabi-v7a", "x86", "armeabi", "mips"
-        }
+        }*/
     }
     buildTypes {
         release {
@@ -34,7 +34,7 @@ repositories
             }
 
             //IronSource SDK
-            maven {
+           /* maven {
                 url "https://dl.bintray.com/ironsource-mobile/android-sdk"
             }
             maven {
@@ -52,7 +52,7 @@ repositories
             maven {
                 //Adcolony SDK
                 url  "https://adcolony.bintray.com/AdColony"
-            }
+            }*/
 
             flatDir {
                 dirs 'libs'
@@ -101,11 +101,12 @@ dependencies {
     /*
     * Iron Source
     * */
-    implementation 'com.ironsource.sdk:mediationsdk:6.7.11@jar'
+//    implementation 'com.ironsource.sdk:mediationsdk:6.7.11@jar'
 
     implementation 'com.google.android.gms:play-services-ads:12.0.1'
     implementation 'com.google.android.gms:play-services-location:12.0.1'
     implementation 'com.jaredrummler:material-spinner:1.3.1'
+//    implementation 'com.github.angads25:toggle:1.1.0'
 //    implementation 'com.github.GrenderG:Toasty:1.3.1'
 
 

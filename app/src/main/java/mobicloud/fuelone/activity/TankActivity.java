@@ -19,20 +19,18 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.mobicloud.fuelone.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jeevandeshmukh.glidetoastlib.GlideToast;
+import com.mobicloud.fuelone.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import mobicloud.fuelone.adapter.MappingAdapter;
 import mobicloud.fuelone.model.FileModel;
 import mobicloud.fuelone.model.MapingModel;
@@ -52,7 +50,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar progressBar;
     private DatabaseReference databaseTank,databaseNozzel;
     private DatabaseReference retriveTank,retriveNozzel;
-    private DatabaseReference tank_config;
+    private DatabaseReference dipChart;
     private DatabaseReference mappingData;
     private static ArrayList<TankModel> tanklist;
     private ArrayList<MapingModel> mappinglist;
@@ -84,13 +82,12 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
 
         context                 = this;
         auth = FirebaseAuth.getInstance();
-        tank_config             = FirebaseDatabase.getInstance().getReference("_tank_config");
+        dipChart             = FirebaseDatabase.getInstance().getReference("dip_Chart");
 
-        databaseTank            = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"tank_");
-        databaseNozzel          = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"nozzel_");
-        retriveTank             = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"tank_");
-        retriveNozzel           = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"nozzel_");
-        mappingData             = FirebaseDatabase.getInstance().getReference(ManageSession.getPreference(context,"id")+"mapping_");
+        databaseTank            = FirebaseDatabase.getInstance().getReference("tank_config").child(ManageSession.getPreference(context,"id"));
+        databaseNozzel          = FirebaseDatabase.getInstance().getReference("nozzel_config").child(ManageSession.getPreference(context,"id"));
+
+        mappingData             = FirebaseDatabase.getInstance().getReference("tank_nozzel_mapping").child(ManageSession.getPreference(context,"id"));
 
         myTankData              = (RecyclerView) findViewById(R.id.myTankData);
         progressBar             = (ProgressBar) findViewById(R.id.progressBar);
@@ -107,6 +104,8 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
         plusImage.setOnClickListener(this);
         submit.setOnClickListener(this);
         addLayout.setOnClickListener(this);
+
+//        InsertData();
    }
 
 
@@ -152,7 +151,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        retriveTank.addValueEventListener(new ValueEventListener() {
+        databaseTank.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -194,7 +193,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        retriveNozzel.addValueEventListener(new ValueEventListener() {
+        databaseNozzel.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -245,9 +244,9 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     public void InsertData(){
         for(int i=0;i<urls.length;i++){
             FileModel model = new FileModel();
-            model.setFileName(title[i]);
-            model.setFileUrl(urls[i]);
-            tank_config.child(tank_config.push().getKey()).setValue(model);
+            model.setDipChartName(title[i]);
+            model.setDipChartURL(urls[i]);
+            dipChart.child(dipChart.push().getKey()).setValue(model);
         }
     }
 
@@ -276,15 +275,14 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     * Set Model to send over Database
     * */
     public void setTank(int tank){
-
+        databaseTank.child(ManageSession.getPreference(context,"id"));
         for(int i=0;i<tank;i++){
-            String id = databaseTank.push().getKey();
             TankModel tankModel = new TankModel();
             tankModel.setUser_id(ManageSession.getPreference(context,"id"));
-            tankModel.setTank_id(id);
+            tankModel.setTank_id(databaseTank.push().getKey());
             tankModel.setTank_name("Tank "+(i+1));
             tankModel.setTank_title("TankTitle "+(i+1));
-            databaseTank.child(id).setValue(tankModel);
+            databaseTank.child(databaseTank.push().getKey()).setValue(tankModel);
         }
 
         if(mappinglist.size()!=0){
@@ -305,6 +303,7 @@ public class TankActivity extends AppCompatActivity implements View.OnClickListe
     * Set Model to send over Database
     * */
     public void setNozzel(int nozzel){
+        databaseNozzel.child(ManageSession.getPreference(context,"id"));
         for(int i=0;i<nozzel;i++){
             String id = databaseNozzel.push().getKey();
             NozzelModel model = new NozzelModel();

@@ -9,14 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.mobicloud.fuelone.R;
-import com.ironsource.mediationsdk.logger.IronSourceError;
-import com.ironsource.mediationsdk.model.Placement;
-import com.ironsource.mediationsdk.sdk.InterstitialListener;
-import com.ironsource.mediationsdk.sdk.OfferwallListener;
-import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +17,7 @@ import java.util.List;
  * Created by Suraj Shakya on 18/05/18.
  */
 
-public class DeshboardFragments extends Fragment  implements RewardedVideoListener, OfferwallListener, InterstitialListener {
+public class DeshboardFragments extends Fragment {
 
     public static FragmentManager fragmentManager;
     public static Fragment fragment;
@@ -50,113 +43,6 @@ public class DeshboardFragments extends Fragment  implements RewardedVideoListen
     private void initWidgets(View view){
 
     }
-
-    /*------------------------------------------*/
-    @Override
-    public void onInterstitialAdReady() {
-
-    }
-
-    @Override
-    public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onInterstitialAdOpened() {
-
-    }
-
-    @Override
-    public void onInterstitialAdClosed() {
-
-    }
-
-    @Override
-    public void onInterstitialAdShowSucceeded() {
-
-    }
-
-    @Override
-    public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onInterstitialAdClicked() {
-
-    }
-
-    @Override
-    public void onOfferwallAvailable(boolean b) {
-
-    }
-
-    @Override
-    public void onOfferwallOpened() {
-
-    }
-
-    @Override
-    public void onOfferwallShowFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public boolean onOfferwallAdCredited(int i, int i1, boolean b) {
-        return false;
-    }
-
-    @Override
-    public void onGetOfferwallCreditsFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onOfferwallClosed() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAvailabilityChanged(boolean b) {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdStarted() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdEnded() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdRewarded(Placement placement) {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClicked(Placement placement) {
-
-    }
-   /*-----------------------------------*/
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

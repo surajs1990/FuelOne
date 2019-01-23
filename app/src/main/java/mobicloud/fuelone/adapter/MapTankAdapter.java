@@ -55,12 +55,12 @@ public class MapTankAdapter extends RecyclerView.Adapter<MapTankAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.fileName.setText(list.get(position).getFileName());
+        holder.fileName.setText(list.get(position).getDipChartName());
 
         holder.viewExel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = list.get(position).getFileUrl();
+                String url = list.get(position).getDipChartURL();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 context.startActivity(i);
@@ -71,8 +71,8 @@ public class MapTankAdapter extends RecyclerView.Adapter<MapTankAdapter.MyViewHo
             @Override
             public void onClick(View v) {
                 Intent intentMessage = new Intent();
-                intentMessage.putExtra("name",list.get(position).getFileName());
-                intentMessage.putExtra("url",list.get(position).getFileUrl());
+                intentMessage.putExtra("name",list.get(position).getDipChartName());
+                intentMessage.putExtra("url",list.get(position).getDipChartURL());
                 activity.setResult(2, intentMessage);
                 activity.finish();
             }

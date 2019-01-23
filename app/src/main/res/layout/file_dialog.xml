@@ -28,6 +28,7 @@
 
 
             <EditText
+                android:inputType="textCapWords"
                 android:singleLine="true"
                 android:paddingLeft="10sp"
                 android:hint="ex DipChart10kl.."

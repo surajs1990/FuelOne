@@ -33,14 +33,6 @@ import com.mobicloud.fuelone.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.infideap.drawerbehavior.AdvanceDrawerLayout;
-
-import com.ironsource.mediationsdk.logger.IronSourceError;
-import com.ironsource.mediationsdk.model.Placement;
-import com.ironsource.mediationsdk.sdk.InterstitialListener;
-import com.ironsource.mediationsdk.sdk.OfferwallListener;
-import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
-
-
 import mobicloud.fuelone.fragments.AboutFragments;
 import mobicloud.fuelone.fragments.ContactFragments;
 import mobicloud.fuelone.fragments.DeshboardFragments;
@@ -54,7 +46,7 @@ import mobicloud.fuelone.utils.ManageSession;
 
 
 public class HomeViewActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, RewardedVideoListener, OfferwallListener, InterstitialListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     boolean DOUBLEBACKTOEXIT = false;
     public static AdvanceDrawerLayout drawer;
@@ -64,13 +56,11 @@ public class HomeViewActivity extends AppCompatActivity
     public static LinearLayout menuLayout;
     public static NavigationView navigationView;
     public static AdvanceDrawerLayout drawer_layout;
+    public static LinearLayout calenderLay;
     public static TextView homeTxt, signoutTxt, contactTxt,
             aboutTxt, settingTxt, profileTxt,
             reposrtTxt,
             nozzelTxt, dipTxt, titleTxt, emailTxt;
-
-    private final String APP_KEY = "7cfa1df5";
-    private final String FALLBACK_USER_ID = "userId";
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference reference;
@@ -88,7 +78,6 @@ public class HomeViewActivity extends AppCompatActivity
     /*Declare widgtes or variables*/
     private void initWidgets(){
         context = this;
-
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -115,7 +104,7 @@ public class HomeViewActivity extends AppCompatActivity
         frame           = (FrameLayout) findViewById(R.id.frame);
         drawer          = (AdvanceDrawerLayout) findViewById(R.id.drawer_layout);
         navigationView  = (NavigationView) findViewById(R.id.nav_view);
-
+        calenderLay     = (LinearLayout) findViewById(R.id.calenderLay);
 
         emailTxt        = (TextView) findViewById(R.id.emailTxt);
         homeTxt         = (TextView) findViewById(R.id.homeTxt);
@@ -134,8 +123,6 @@ public class HomeViewActivity extends AppCompatActivity
         drawer.useCustomBehavior(Gravity.END);
         emailTxt.setText(ManageSession.getPreference(context,"email"));
 
-//        callFragment();
-
     }
 
 
@@ -147,6 +134,7 @@ public class HomeViewActivity extends AppCompatActivity
     /*Call fist Deshboard functions*/
     private void callFragment(){
         setTtitle(context.getResources().getString(R.string.home_txt));
+        calenderLay.setVisibility(View.GONE);
         Fragment fragment = DeshboardFragments.getInstance(context, fragmentManager);
         FragmentTransaction ft1 = fragmentManager.beginTransaction();
         ft1.replace(R.id.frame, fragment, "DeshboardFragments");
@@ -158,15 +146,11 @@ public class HomeViewActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        // call the IronSource onResume method
-//        IronSource.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // call the IronSource onPause method
-//        IronSource.onPause(this);
     }
 
     /*---Click Listener---- */
@@ -183,35 +167,10 @@ public class HomeViewActivity extends AppCompatActivity
         homeTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                /*if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                    setTtitle(context.getResources().getString(R.string.home));
-                    Fragment fragment = DeshboardFragments.getInstance(context, fragmentManager);
-                    FragmentTransaction ft1 = fragmentManager.beginTransaction();
-                    ft1.replace(R.id.frame, fragment, "DeshboardFragments");
-                    ft1.addToBackStack(null);
-                    ft1.commit();
-                }*/
-
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     callFragment();
                 }
-
-                /*Fragment DeshboardFragments = fragmentManager.findFragmentByTag("DeshboardFragments");
-                if(DeshboardFragments!=null){
-                    if(DeshboardFragments.isAdded()){
-                        if (drawer.isDrawerOpen(GravityCompat.START)) {
-                            drawer.closeDrawer(GravityCompat.START);
-                        }
-                    }else {
-                        if (drawer.isDrawerOpen(GravityCompat.START)) {
-                            drawer.closeDrawer(GravityCompat.START);
-                            callFragment();
-                        }
-                    }
-                }*/
             }
         });
 
@@ -251,6 +210,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._contact_us));
+                    calenderLay.setVisibility(View.GONE);
                     Fragment fragment = ContactFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "ContactFragments");
@@ -265,6 +225,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._about_us));
+                    calenderLay.setVisibility(View.GONE);
                     Fragment fragment = AboutFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "AboutFragments");
@@ -279,6 +240,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._setting));
+                    calenderLay.setVisibility(View.GONE);
                     Fragment fragment = SettingFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "SettingFragments");
@@ -293,6 +255,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._profile));
+                    calenderLay.setVisibility(View.GONE);
                     Fragment fragment = ProfileFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "ProfileFragments");
@@ -307,6 +270,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._report));
+                    calenderLay.setVisibility(View.GONE);
                     Fragment fragment = ReportFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "ReportFragments");
@@ -321,6 +285,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._nozzel));
+                    calenderLay.setVisibility(View.GONE);
                     Fragment fragment = NozzelFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "NozzelFragments");
@@ -335,6 +300,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._dip));
+                    calenderLay.setVisibility(View.VISIBLE);
                     Fragment fragment = DipFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "DipFragments");
@@ -343,21 +309,6 @@ public class HomeViewActivity extends AppCompatActivity
                 }
             }
         });
-
-        /*titleTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                    setTtitle(context.getResources().getString(R.string._profile));
-                    Fragment fragment = ProfileFragments.getInstance(context, fragmentManager);
-                    FragmentTransaction ft1 = fragmentManager.beginTransaction();
-                    ft1.replace(R.id.frame, fragment, "ProfileFragments");
-                    ft1.addToBackStack(null);
-                    ft1.commit();
-                }
-            }
-        });*/
 
     }
 
@@ -391,8 +342,6 @@ public class HomeViewActivity extends AppCompatActivity
 
     }
 
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -404,114 +353,13 @@ public class HomeViewActivity extends AppCompatActivity
     }
 
 
-    /*Set Fragment Title*/
+    /*
+    * Set Fragment Title
+    * */
     public static void setTtitle(String title){
         titleTxt.setText(title);
     }
 
-    @Override
-    public void onInterstitialAdReady() {
 
-    }
-
-    @Override
-    public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onInterstitialAdOpened() {
-
-    }
-
-    @Override
-    public void onInterstitialAdClosed() {
-
-    }
-
-    @Override
-    public void onInterstitialAdShowSucceeded() {
-
-    }
-
-    @Override
-    public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onInterstitialAdClicked() {
-
-    }
-
-    @Override
-    public void onOfferwallAvailable(boolean b) {
-
-    }
-
-    @Override
-    public void onOfferwallOpened() {
-
-    }
-
-    @Override
-    public void onOfferwallShowFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public boolean onOfferwallAdCredited(int i, int i1, boolean b) {
-        return false;
-    }
-
-    @Override
-    public void onGetOfferwallCreditsFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onOfferwallClosed() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAvailabilityChanged(boolean b) {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdStarted() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdEnded() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdRewarded(Placement placement) {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClicked(Placement placement) {
-
-    }
 }
 

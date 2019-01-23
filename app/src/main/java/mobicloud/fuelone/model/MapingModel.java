@@ -19,9 +19,9 @@ public class MapingModel implements Serializable {
     @Expose
     private String tank_id;
 
-    @SerializedName("tankName")
+    @SerializedName("tankDipName")
     @Expose
-    private String tankName;
+    private String tankDipName;
 
     @SerializedName("nozzel_name")
     @Expose
@@ -42,6 +42,18 @@ public class MapingModel implements Serializable {
     @SerializedName("sheetUrl")
     @Expose
     private String sheetUrl;
+
+    @SerializedName("dipentry")
+    @Expose
+    private String dipentry;
+
+    public String getDipentry() {
+        return dipentry;
+    }
+
+    public void setDipentry(String dipentry) {
+        this.dipentry = dipentry;
+    }
 
     public String getSheet() {
         return sheet;
@@ -67,13 +79,7 @@ public class MapingModel implements Serializable {
         this.tank_id = tank_id;
     }
 
-    public String getTankName() {
-        return tankName;
-    }
 
-    public void setTankName(String tankName) {
-        this.tankName = tankName;
-    }
 
     public String getNozzel_name() {
         return nozzel_name;
@@ -107,17 +113,26 @@ public class MapingModel implements Serializable {
         this.sheetUrl = sheetUrl;
     }
 
+    public String getTankDipName() {
+        return tankDipName;
+    }
+
+    public void setTankDipName(String tankDipName) {
+        this.tankDipName = tankDipName;
+    }
+
     @Override
     public String toString() {
         return "MapingModel{" +
                 "userId='" + userId + '\'' +
                 ", tank_id='" + tank_id + '\'' +
-                ", tankName='" + tankName + '\'' +
+                ", tankDipName='" + tankDipName + '\'' +
                 ", nozzel_name='" + nozzel_name + '\'' +
                 ", fuletype='" + fuletype + '\'' +
                 ", capacity='" + capacity + '\'' +
                 ", sheet='" + sheet + '\'' +
                 ", sheetUrl='" + sheetUrl + '\'' +
+                ", dipentry='" + dipentry + '\'' +
                 '}';
     }
 }
