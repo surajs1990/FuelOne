@@ -63,6 +63,7 @@ public class DipEntryAdapter extends RecyclerView.Adapter<DipEntryAdapter.MyView
         holder.tankNameTxt.setText(list.get(position).getTankDipName());
         holder.valueEdut.setText(list.get(position).getDipentry());
         holder.valueEdut.setSelection(holder.valueEdut.getText().length());
+
         holder.valueEdut.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

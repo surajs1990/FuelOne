@@ -55,6 +55,7 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
     private DatabaseReference retriveTank, addDipEntry;
     private TextView dateTxt, nextButton;
     private static ArrayList<MapingModel> mappinglist;
+    private static ArrayList<MapingModel> copyList;
     private SwitchButton Switchbtn;
     int mHour, mMinute, mYear, mMonth, mDay;
     DatePickerDialog datePickerDialog;
@@ -65,6 +66,7 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
     private DipEntryAdapter adapter;
     private TextView messageTxt;
     private ArrayList<DipEntryModel> list;
+    private static String nightMode ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +75,13 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
         setTitle("Dip Entry");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initWidgets();
-
     }
 
     /*Declare widgtes*/
     public void initWidgets(){
-        context                 = this;
-        parentlayout            = (RelativeLayout) findViewById(R.id.parentlayout);
+
+        context         = this;
+        parentlayout    = (RelativeLayout) findViewById(R.id.parentlayout);
 
         messageTxt      = (TextView) findViewById(R.id.messageTxt);
         dipEntryList    = (RecyclerView) findViewById(R.id.dipEntryList);
@@ -110,6 +112,7 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
+
     }
 
 
@@ -149,6 +152,7 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
         boolean flag = false;
         for(int i =0;i<list.size();i++){
             if(list.get(i).getDate().equalsIgnoreCase(date)){
+                nightMode = list.get(i).getShift();
                 SetData(list.get(i).getTanks());
                 flag = true;
                 break;
@@ -192,10 +196,18 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.show();
-
     }
 
     private void SetData(ArrayList<MapingModel> list){
+        if(nightMode.equalsIgnoreCase("day")){
+            Switchbtn.setChecked(true);
+        }else if(nightMode.equalsIgnoreCase("night")){
+            Switchbtn.setChecked(false);
+        }else {
+            Switchbtn.setChecked(false);
+        }
+        copyList = new ArrayList<>();
+        copyList.addAll(list);
         adapter = new DipEntryAdapter(context,DipEntryActivity.this, list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         dipEntryList.setLayoutManager(mLayoutManager);
@@ -203,10 +215,10 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
         dipEntryList.setAdapter(adapter);
     }
 
-    private boolean ValidList(){
+    private boolean ValidList(ArrayList<MapingModel> map){
         boolean flag = false;
-        for(int i=0;i<mappinglist.size();i++){
-            if(!mappinglist.get(i).getDipentry().trim().equals("")){
+        for(int i=0;i<map.size();i++){
+            if(!map.get(i).getDipentry().trim().equals("")){
                 flag = true;
             }else {
                 flag = false;
@@ -220,17 +232,20 @@ public class DipEntryActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         if(v.getId() == R.id.nextButton){
-            if(ValidList()){
+            if(ValidList(copyList)){
+                String DayMode = "";
                 DipEntryModel entryModel = new DipEntryModel();
                 entryModel.setUserId(ManageSession.getPreference(context,"id"));
                 entryModel.setDate(DATE);
                 if(shiftDay){
                     entryModel.setShift("day");
+                    DayMode = "Day";
                 }else {
                     entryModel.setShift("night");
+                    DayMode = "Night";
                 }
-                entryModel.setTanks(mappinglist);
-                addDipEntry.child(DATE+"_"+ManageSession.getPreference(context,"id")).setValue(entryModel);
+                entryModel.setTanks(copyList);
+                addDipEntry.child(DATE+"_"+ManageSession.getPreference(context,"id")+"_"+DayMode).setValue(entryModel);
                 ShowAlertDialog(DATE);
             }else {
                 Snackbar.make(parentlayout,"Please Enter Dipentry",Snackbar.LENGTH_SHORT).show();

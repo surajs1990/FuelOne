@@ -38,6 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import mobicloud.fuelone.activity.DipEntryActivity;
@@ -150,6 +151,7 @@ public class DipFragments extends Fragment implements View.OnClickListener {
 
 
     private void SetData(ArrayList<DipEntryModel> list){
+        Collections.reverse(list);
         adapter = new DipConfigAdapter(context,getActivity(), list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         dipEntryList.setLayoutManager(mLayoutManager);
@@ -177,8 +179,7 @@ public class DipFragments extends Fragment implements View.OnClickListener {
                     String formattedDate = df.format(dateObj);
                     DATE = formattedDate;
                     addDipEntry     = FirebaseDatabase.getInstance().getReference("dip_entry")
-                            .child(ManageSession.getPreference(context,"id")).child(DATE+
-                                    "_"+ManageSession.getPreference(context,"id"));
+                            .child(ManageSession.getPreference(context,"id"));
                     GetAllData();
                 } catch (ParseException e) {
                     e.printStackTrace();

@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Suraj Shakya on 07/08/2018.
@@ -18,6 +19,10 @@ public class MapingModel implements Serializable {
     @SerializedName("tank_id")
     @Expose
     private String tank_id;
+
+    @SerializedName("tankName")
+    @Expose
+    private String tankName;
 
     @SerializedName("tankDipName")
     @Expose
@@ -46,6 +51,18 @@ public class MapingModel implements Serializable {
     @SerializedName("dipentry")
     @Expose
     private String dipentry;
+
+    @SerializedName("nozzel_list")
+    @Expose
+    private ArrayList<NozzelItem> nozzel_list;
+
+    public String getTankName() {
+        return tankName;
+    }
+
+    public void setTankName(String tankName) {
+        this.tankName = tankName;
+    }
 
     public String getDipentry() {
         return dipentry;
@@ -79,7 +96,13 @@ public class MapingModel implements Serializable {
         this.tank_id = tank_id;
     }
 
+    public ArrayList<NozzelItem> getNozzel_list() {
+        return nozzel_list;
+    }
 
+    public void setNozzel_list(ArrayList<NozzelItem> nozzel_list) {
+        this.nozzel_list = nozzel_list;
+    }
 
     public String getNozzel_name() {
         return nozzel_name;
@@ -126,6 +149,7 @@ public class MapingModel implements Serializable {
         return "MapingModel{" +
                 "userId='" + userId + '\'' +
                 ", tank_id='" + tank_id + '\'' +
+                ", tankName='" + tankName + '\'' +
                 ", tankDipName='" + tankDipName + '\'' +
                 ", nozzel_name='" + nozzel_name + '\'' +
                 ", fuletype='" + fuletype + '\'' +
@@ -133,6 +157,7 @@ public class MapingModel implements Serializable {
                 ", sheet='" + sheet + '\'' +
                 ", sheetUrl='" + sheetUrl + '\'' +
                 ", dipentry='" + dipentry + '\'' +
+                ", nozzel_list=" + nozzel_list +
                 '}';
     }
 }

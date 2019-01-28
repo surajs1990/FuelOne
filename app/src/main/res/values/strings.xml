@@ -29,6 +29,7 @@
     <!--Tank Config-->
     <string name="configured_tank">Please configured your fuel\ntank and nozzles.</string>
     <string name="configured_dip">We don\'t have any entry to show here. \nPlease add dip record.</string>
+    <string name="configured_nozzel">We don\'t have any entry to show here. \nPlease add nozzels record.</string>
     <string name="_dip_txt">You don\'t have configured tank with nozzels. \nPlease check setting section.</string>
     <string name="number_of_tank">Number Of Tank</string>
     <string name="number_of_nozzel">Number Of Nozzel</string>

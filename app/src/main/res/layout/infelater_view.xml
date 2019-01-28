@@ -21,6 +21,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textColor="@color/colorBlack_1000"
                 android:id="@+id/tankNameTxt"
                 android:textSize="14sp"
                 android:text="Text"
@@ -36,17 +37,24 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textColor="@color/colorBlack_1000"
                 android:id="@+id/dipEntryTxt"
                 android:gravity="right"
                 android:textSize="16sp"
                 android:text="Text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
         </LinearLayout>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_below="@+id/LayoutOne"
+        android:orientation="vertical"
+        android:id="@+id/NozzelView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
 
 </RelativeLayout>

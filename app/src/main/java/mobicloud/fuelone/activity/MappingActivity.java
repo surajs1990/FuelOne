@@ -34,6 +34,7 @@ import java.util.Arrays;
 import io.apptik.widget.multiselectspinner.MultiSelectSpinner;
 import mobicloud.fuelone.adapter.MultiSelectionSpinner;
 import mobicloud.fuelone.model.MapingModel;
+import mobicloud.fuelone.model.NozzelItem;
 import mobicloud.fuelone.model.NozzelModel;
 import mobicloud.fuelone.model.TankModel;
 import mobicloud.fuelone.utils.ManageSession;
@@ -189,6 +190,7 @@ public class MappingActivity extends AppCompatActivity {
                     tank_spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
                         @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                             SetTank(item);
+                            TANKID = item;
                             /*TANKID = _tank.get(position).getTank_id();
                             TANKNAME =  _tank.get(position).getTank_name();
                             tankName.setText(TANKNAME);*/
@@ -274,7 +276,6 @@ public class MappingActivity extends AppCompatActivity {
         String _tankName    = tankName.getText().toString().trim();
         NOZZELNAME          = nozzel_spinner.getSelectedItemsAsString();
 
-
         if (TextUtils.isEmpty(NOZZELNAME)) {
             new GlideToast.makeToast(MappingActivity.this,"Select Nozzel", GlideToast.LENGTHTOOLONG, GlideToast.FAILTOAST).show();
             return;
@@ -302,8 +303,10 @@ public class MappingActivity extends AppCompatActivity {
         MapingModel mapingModel = new MapingModel();
         mapingModel.setUserId(ManageSession.getPreference(context,"id"));
         mapingModel.setTank_id(TANKID);
+        mapingModel.setTankName(TANKNAME);
         mapingModel.setTankDipName(_tankName);
         mapingModel.setNozzel_name(NOZZELNAME);
+        mapingModel.setNozzel_list(GetNozzels(NOZZELNAME));
         mapingModel.setFuletype(FUELTYPE);
         mapingModel.setCapacity(_capacity);
         mapingModel.setSheet(chartEdit.getText().toString());
@@ -313,6 +316,33 @@ public class MappingActivity extends AppCompatActivity {
         finish();
     }
 
+
+    public ArrayList<NozzelItem> GetNozzels(String nozzelString){
+        ArrayList<NozzelItem> list = null;
+        String[] nozzel=null;
+        try {
+            nozzel = nozzelString.split(",");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(nozzel.length>0){
+            list = new ArrayList<>();
+            for(int k=0;k<nozzel.length;k++){
+                NozzelItem item = new NozzelItem();
+                item.setNozzelName(nozzel[k]);
+                item.setNozzel_entry("");
+                list.add(item);
+            }
+        }else {
+            list = new ArrayList<>();
+            NozzelItem item = new NozzelItem();
+            item.setNozzelName(nozzelString);
+            item.setNozzel_entry("");
+            list.add(item);
+        }
+
+        return list;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -335,7 +365,7 @@ public class MappingActivity extends AppCompatActivity {
             strings.add("Select Tank");
             for(int i=0;i<mappinglist.size();i++){
                 for(int j=0;j<list.size();j++){
-                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getTankDipName())){
+                    if(list.get(j).equalsIgnoreCase(mappinglist.get(i).getTankName().trim())){
                         list.remove(j);
                     }
                 }

@@ -285,7 +285,7 @@ public class HomeViewActivity extends AppCompatActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                     setTtitle(context.getResources().getString(R.string._nozzel));
-                    calenderLay.setVisibility(View.GONE);
+                    calenderLay.setVisibility(View.VISIBLE);
                     Fragment fragment = NozzelFragments.getInstance(context, fragmentManager);
                     FragmentTransaction ft1 = fragmentManager.beginTransaction();
                     ft1.replace(R.id.frame, fragment, "NozzelFragments");
